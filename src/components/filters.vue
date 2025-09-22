@@ -2,13 +2,11 @@
   <v-col>
     <v-card class="filter-card">
       <div class="d-flex justify-space-between">
-        <v-btn variant="plain" color="red" class="pa-5">حذف فیلترها</v-btn>
         <span class="pa-5">فیلترها</span>
+        <v-btn variant="plain" color="red" class="pa-5">حذف فیلترها</v-btn>
       </div>
       <div class="d-flex flex-column align-center">
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -19,8 +17,6 @@
         />
 
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -31,8 +27,6 @@
         />
 
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -43,24 +37,20 @@
         />
 
         <div class="d-flex flex-column">
-          <!-- آیتم اول -->
           <div class="switch-row">
-            <v-switch hide-details inset density="compact"></v-switch>
             <span class="switch-text">ارسال امروز</span>
+            <v-switch hide-details inset density="compact"></v-switch>
           </div>
           <v-divider></v-divider>
 
-          <!-- آیتم دوم -->
           <div class="switch-row">
-            <v-switch hide-details inset density="compact"></v-switch>
             <span class="switch-text">فقط کالاهای موجود</span>
+            <v-switch hide-details inset density="compact"></v-switch>
           </div>
           <v-divider></v-divider>
         </div>
 
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -71,8 +61,6 @@
         />
 
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -83,8 +71,6 @@
         />
 
         <v-select
-          class="rtl-select"
-  :menu-props="{ contentClass: 'rtl-menu' }"
           variant="underlined"
           width="248"
           height="32"
@@ -109,7 +95,7 @@
 
 .switch-row {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 8px 0;
@@ -118,10 +104,10 @@
 .switch-text {
   font-size: 14px;
   color: #333;
-  margin-left:4em;
+  margin-left: 4em;
 }
 
-.rtl-select {
+/* .rtl-select {
   direction: rtl;
 }
 
@@ -134,8 +120,8 @@
 }
 
 .rtl-select .v-field__append-inner {
-  order: -1; 
-  margin-left: 8px; 
+  order: -1;
+  margin-left: 8px;
   margin-right: 0;
 }
 
@@ -143,6 +129,5 @@
   text-align: right !important;
   right: 0;
   left: auto;
-}
-
+} */
 </style>
