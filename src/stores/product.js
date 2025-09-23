@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-export const useCardStore = defineStore('card', {
+import Products from '@/pages/products.vue'
+export const useCardStore = defineStore('product', {
   state: () => ({
-    cards: [],
+    products: [],
     images: [],
     page: 1,
     perPage: 9,
@@ -20,7 +21,7 @@ export const useCardStore = defineStore('card', {
          : await axios.get('/api/api/v2/storefront/products', {
           params: { include: 'images', page: this.page, per_page: this.perPage },
         })
-        this.cards = response.data.data
+        this.products = response.data.data
         this.images = response.data.included
         this.count = response.data.meta.count
         this.totalCount = response.data.meta.total_count
@@ -38,8 +39,8 @@ export const useCardStore = defineStore('card', {
       }
     },
 
-    getProductImages(card) {
-      const imageId = card.relationships.images.data[0].id
+    getProductImages(product) {
+      const imageId = product.relationships.images.data[0].id
       const image = this.images.find((img) => img.id === imageId)
       return image.attributes.styles[2].url
     },

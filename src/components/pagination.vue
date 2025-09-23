@@ -1,6 +1,6 @@
 <template>
-  <div class="pagination-wrapper mt-10">
-    <v-btn variant="flat" @click="nextPage">
+  <div class="pagination-wrapper my-10">
+    <v-btn variant="flat" @click="prevPage">
       <v-img src="/images/arrow-right.png" width="24" height="24" />
     </v-btn>
 
@@ -8,11 +8,13 @@
       v-model="cardStore.page"
       :length="totalPage"
       :total-visible="10"
+      next-icon="null"
+      prev-icon="null"
       class="custom-pagination"
       rounded="circle"
     />
 
-    <v-btn variant="flat" @click="prevPage">
+    <v-btn variant="flat" @click="nextPage">
       <v-img src="/images/arrow-left.png" width="24" height="24" />
     </v-btn>
   </div>
@@ -20,7 +22,7 @@
 
 <script setup>
 import { computed, onMounted, watch } from 'vue'
-import { useCardStore } from '@/stores/card'
+import { useCardStore } from '@/stores/product'
 const cardStore = useCardStore()
 const count = computed(() => cardStore.count)
 const totalCount = computed(() => cardStore.totalCount)
@@ -40,12 +42,16 @@ watch(
   },
 )
 
-async function nextPage() {
-  await cardStore.getCards(links.value.next)
+function nextPage() {
+  if (cardStore.page < totalPage.value) {
+    cardStore.page++
+  }
 }
 
-async function prevPage() {
-  await cardStore.getCards(links.value.prev)
+function prevPage() {
+  if (cardStore.page > 1) {
+    cardStore.page--
+  }
 }
 </script>
 
@@ -60,8 +66,8 @@ async function prevPage() {
 .custom-pagination {
   border: 1px solid #d6d6d6;
   border-radius: 24px;
-  width: 704px;
-  height: 56px;
+  max-width: 700px;
+  height: 55px;
 }
 
 ::v-deep(.custom-pagination .v-pagination__item) {
@@ -78,9 +84,8 @@ async function prevPage() {
   margin: 12px;
 }
 
-::v-deep(.custom-pagination .v-pagination__item.v-pagination__item--active) {
-  background-color: #ca8289;
-  color: white;
-  border-color: #b02a37;
+::v-deep(.custom-pagination .v-pagination__item:hover) {
+  background-color: #f0a3aa !important;
+  color: white !important;
 }
 </style>

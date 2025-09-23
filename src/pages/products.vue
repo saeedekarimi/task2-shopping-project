@@ -1,29 +1,27 @@
 <template>
-  <v-card class="main">
-    <v-col class="mb-10">
-      <HeaderComponent />
-      <MainMenu />
-      <v-row class="d-flex flex-row">
-        <v-col cols="3">
-          <filters />
-        </v-col>
-        <v-col cols="9">
-          <div>
-            <SortMenu />
-            <productCard />
-            <Pagination />
-          </div>
-        </v-col>
+  <v-container  class="main-container">
+    <HeaderComponent />
+    <MainMenu />
 
-        <FooterComponent />
-      </v-row>
-    </v-col>
-  </v-card>
+    <v-row class="content-row" dense>
+      <v-col cols="12" sm="6" md="3">
+          <Filters />
+      </v-col>
+
+      <v-col cols="12" sm="6" md="9">
+        <SortMenu />
+        <ProductCard />
+        <Pagination />
+      </v-col>
+    </v-row>
+
+    <FooterComponent />
+  </v-container>
 </template>
 
 <script setup>
-import productCard from '@/components/productCard.vue'
-import filters from '@/components/filters.vue'
+import ProductCard from '@/components/productCard.vue'
+import Filters from '@/components/filters.vue'
 import Pagination from '@/components/pagination.vue'
 import HeaderComponent from '@/components/headerComponent.vue'
 import MainMenu from '@/components/mainMenu.vue'
@@ -32,7 +30,7 @@ import FooterComponent from '@/components/footerComponent.vue'
 </script>
 
 <style scoped>
-.main {
-  padding: 0 10em;
+.main-container{
+  margin: 0 3em;
 }
 </style>

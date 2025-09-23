@@ -24,7 +24,7 @@ const vuetify = createVuetify({
   defaults: {
     global: {
       style: {
-        fontFamily: "IranYekan, Tahoma, sans-serif",
+        fontFamily: "IranYekan, sans-serif",
       },
     },
   },

@@ -1,27 +1,12 @@
 @font-face {
   font-family: 'IranYekan';
-  src: url('@/assets/fonts/iranyekan/IRANYekanX-Regular.woff2') format('woff2'),
-       url('@/assets/fonts/iranyekan/IRANYekanX-Regular.woff') format('woff');
-  font-weight: 400;
+  src: url('@/assets/fonts/iranyekan/Qs_Iranyekan.ttf') format('woff2');
+  font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-@font-face {
-  font-family: 'IranYekan';
-  src: url('@/assets/fonts/iranyekan/IRANYekanX-Medium.woff2') format('woff2'),
-       url('@/assets/fonts/iranyekan/IRANYekanX-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'IranYekan';
-  src: url('@/assets/fonts/iranyekan/IRANYekanX-Bold.woff2') format('woff2'),
-       url('@/assets/fonts/iranyekan/IRANYekanX-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-}
 
 body {
-  font-family: "IranYekan", Tahoma, sans-serif;
+  font-family: 'IranYekan', sans-serif;
 }
