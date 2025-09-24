@@ -15,8 +15,9 @@
       </v-col>
     </v-row>
 
-    <FooterComponent />
   </v-container>
+      <FooterComponent />
+
 </template>
 
 <script setup>

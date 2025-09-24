@@ -5,7 +5,7 @@
         <v-sheet class="ma-2">
           <v-card max-width="288" min-height="429" class="cards mt-5">
             <v-img
-              :src="cardStore.getProductImages(card)"
+              :src="productStore.getProductImages(card)"
               max-height="256"
               max-width="256"
               class="mx-auto my-3"
@@ -39,13 +39,13 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useCardStore } from '@/stores/product'
-const cardStore = useCardStore()
+import { useProductStore } from '@/stores/product'
+const productStore = useProductStore()
 
-const cards = computed(() => cardStore.products)
+const cards = computed(() => productStore.products)
 
 onMounted(() => {
-  cardStore.getCards()
+  productStore.getProducts()
 })
 </script>
 

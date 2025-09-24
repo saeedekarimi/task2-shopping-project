@@ -5,7 +5,7 @@
     </v-btn>
 
     <v-pagination
-      v-model="cardStore.page"
+      v-model="productStore.page"
       :length="totalPage"
       :total-visible="10"
       next-icon="null"
@@ -22,35 +22,35 @@
 
 <script setup>
 import { computed, onMounted, watch } from 'vue'
-import { useCardStore } from '@/stores/product'
-const cardStore = useCardStore()
-const count = computed(() => cardStore.count)
-const totalCount = computed(() => cardStore.totalCount)
-const totalPage = computed(() => cardStore.totalPage)
-const links = computed(() => cardStore.links)
+import { useProductStore } from '@/stores/product'
+const productStore = useProductStore()
+const count = computed(() => productStore.count)
+const totalCount = computed(() => productStore.totalCount)
+const totalPage = computed(() => productStore.totalPage)
+const links = computed(() => productStore.links)
 
 onMounted(() => {
-  cardStore.getCards()
+  productStore.getProducts()
 })
 
 watch(
-  () => cardStore.page,
+  () => productStore.page,
   (newPage, oldPage) => {
     if (newPage !== oldPage) {
-      cardStore.getCards()
+      productStore.getProducts()
     }
   },
 )
 
 function nextPage() {
-  if (cardStore.page < totalPage.value) {
-    cardStore.page++
+  if (productStore.page < totalPage.value) {
+    productStore.page++
   }
 }
 
 function prevPage() {
-  if (cardStore.page > 1) {
-    cardStore.page--
+  if (productStore.page > 1) {
+    productStore.page--
   }
 }
 </script>

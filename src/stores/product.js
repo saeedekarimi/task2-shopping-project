@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import Products from '@/pages/products.vue'
-export const useCardStore = defineStore('product', {
+import qs from 'qs'
+export const useProductStore = defineStore('product', {
   state: () => ({
     products: [],
     images: [],
@@ -11,15 +11,33 @@ export const useCardStore = defineStore('product', {
     totalPage: 0,
     count: 0,
     links: {},
+    colors: [],
+    sizes: [],
   }),
 
   actions: {
-    async getCards(url) {
+    async getProducts(queryStringFilters) {
       try {
-        const response =url 
-        ? await axios.get(url)
-         : await axios.get('/api/api/v2/storefront/products', {
-          params: { include: 'images', page: this.page, per_page: this.perPage },
+        console.log('Query String:', queryStringFilters)
+
+        const parsedFilters = qs.parse(queryStringFilters, { depth: 10 })
+
+        const response = await axios.get('/api/api/v2/storefront/products', {
+          params: {
+            include: 'images',
+            page: this.page,
+            per_page: this.perPage,
+            ...parsedFilters,
+          },
+
+          paramsSerializer: (params) => {
+            return qs.stringify(params, { encode: false, arrayFormat: 'repeat' })
+          },
+
+          headers: {
+            'Cache-Control': 'no-cache',
+            Pragma: 'no-cache',
+          },
         })
         this.products = response.data.data
         this.images = response.data.included
@@ -27,13 +45,10 @@ export const useCardStore = defineStore('product', {
         this.totalCount = response.data.meta.total_count
         this.totalPage = response.data.meta.total_pages
         this.links = response.data.links
+        this.colors = response.data.meta.filters.option_types[0].option_values
+        this.sizes = response.data.meta.filters.option_types[1].option_values
 
-        if (response.data.links?.self) {
-      const urlObj = new URL(response.data.links.self)
-      this.page = parseInt(urlObj.searchParams.get('page')) || 1
-    }
-       console.log(this.links)
-        console.log(response.data)
+        console.log(response.data.data)
       } catch (error) {
         console.log(error)
       }

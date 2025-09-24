@@ -4,7 +4,9 @@
       <v-card class="filter-card mt-3">
         <div class="d-flex justify-space-between align-center mb-4">
           <span class="filter-title">فیلترها</span>
-          <v-btn variant="text" color="red" size="small">حذف فیلترها</v-btn>
+          <v-btn @click="applyFilters" variant="text" color="" size="small">اعمال فیلترها</v-btn>
+
+          <v-btn @click="removeFilters" variant="text" color="red-darken-4" size="small">حذف فیلترها</v-btn>
         </div>
 
         <v-expansion-panels variant="accordion" class="">
@@ -30,8 +32,8 @@
                 v-for="size in sizes"
                 :key="size.value"
                 v-model="selectedSizes"
-                :label="size.label"
-                :value="size.value"
+                :label="size.name"
+                :value="size.name"
                 density="compact"
                 hide-details
               />
@@ -45,8 +47,8 @@
                 v-for="color in colors"
                 :key="color.value"
                 v-model="selectedColors"
-                :label="color.label"
-                :value="color.value"
+                :label="color.name"
+                :value="color.name"
                 density="compact"
                 hide-details
               />
@@ -56,9 +58,7 @@
 
         <div class="mt-4">
           <div class="switch-row">
-            <span class="switch-text">
-            ارسال امروز
-          </span>
+            <span class="switch-text"> ارسال امروز </span>
             <v-switch
               v-model="todayDelivery"
               hide-details
@@ -77,7 +77,6 @@
               color="red-darken-4"
               density="compact"
               inset="1"
-         
             />
           </div>
           <v-divider />
@@ -113,7 +112,47 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useProductStore } from '@/stores/product'
+const productStore = useProductStore()
+import qs from 'qs';
+
+
+const selectedBrands = ref([])
+const selectedSizes = ref([])
+const selectedColors = ref([])
+
+const todayDelivery = ref(false)
+const availableOnly = ref(false)
+const price = ref([10, 50])
+
+onMounted(() => {
+  const urlParams = window.location.search.replace(/^\?/, '')
+  const filtersFromUrl = qs.parse(urlParams, { depth: 10, ignoreQueryPrefix: true })
+  console.log('Filters from URL:', filtersFromUrl)
+
+  if (filtersFromUrl.filter?.options?.color) {
+    selectedColors.value = Array.isArray(filtersFromUrl.filter.options.color)
+      ? filtersFromUrl.filter.options.color
+      : [filtersFromUrl.filter.options.color]
+  }
+  if (filtersFromUrl.filter?.options?.size) {
+    selectedSizes.value = Array.isArray(filtersFromUrl.filter.options.size)
+      ? filtersFromUrl.filter.options.size
+      : [filtersFromUrl.filter.options.size]
+  }
+  const queryStringFilters = qs.stringify(filtersFromUrl, {
+    encode: false,   
+    arrayFormat: 'repeat',
+  })
+  
+console.log("gfgfghghghg",  queryStringFilters)
+  productStore.getProducts(queryStringFilters)
+});
+
+
+const sizes = computed(() => productStore.sizes)
+const colors = computed(() => productStore.colors)
 
 const brands = [
   { label: 'اچ پی', value: 'hp' },
@@ -122,27 +161,35 @@ const brands = [
   { label: 'لنوو', value: 'lenovo' },
 ]
 
-const sizes = [
-  { label: ' 2xl', value: '2xl' },
-  { label: ' xl', value: 'xl' },
-  { label: 'L', value: 'L' },
-  { label: 'Medium', value: 'medium' },
-]
+function applyFilters() {
+  const filters = {
+    filter :{
+       options: {
+      color: selectedColors.value,
+      size: selectedSizes.value,
+    },
+   }
+  }
+const queryStringFilters = qs.stringify(filters, {
+  encode: false,       
+  arrayFormat: 'repeat'
+});
+window.history.pushState({}, '', `/?${queryStringFilters}`);
 
-const colors = [
-  { label: 'سبز', value: 'green' },
-  { label: 'آبی', value: 'blue' },
-  { label: 'زرد', value: 'yellow' },
-  { label: 'مشکی', value: 'black' },
-  { label: 'سفید', value: 'White' },
-]
-const selectedBrands = ref([])
-const selectedSizes = ref([])
-const selectedColors = ref([])
+console.log(queryStringFilters);
 
-const todayDelivery = ref(false)
-const availableOnly = ref(false)
-const price = ref([10, 50])
+productStore.getProducts(queryStringFilters)
+}
+
+
+function removeFilters() {
+  selectedSizes.value = [];
+  selectedColors.value = [];
+   window.history.pushState({}, '', '/')
+
+   productStore.getProducts()
+}
+
 </script>
 
 <style scoped>
@@ -188,5 +235,4 @@ const price = ref([10, 50])
 :deep(.v-expansion-panel-title__overlay) {
   background: transparent !important;
 }
-
 </style>
