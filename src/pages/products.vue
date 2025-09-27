@@ -1,8 +1,5 @@
 <template>
   <v-container  class="main-container">
-    <HeaderComponent />
-    <MainMenu />
-
     <v-row class="content-row" dense>
       <v-col cols="12" sm="6" md="3">
           <Filters />
@@ -16,7 +13,6 @@
     </v-row>
 
   </v-container>
-      <FooterComponent />
 
 </template>
 

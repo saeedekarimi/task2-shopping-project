@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex ga-16 py-8">
+  <div class="d-flex ga-16 px-16  py-8">
     <v-img
       src="/public/images/frame.png"
       alt=""
@@ -7,7 +7,6 @@
       max-width="180"
       class="ma-0 pa-0"
     ></v-img>
-    <!-- <input type="search" placeholder="جستجو"> -->
     <v-text-field
       max-width="600"
       class="border-sm border-solid rounded-xl pr-5 pl-5 pt-1"
@@ -36,21 +35,35 @@
       </template>
     </v-btn>
 
-   <v-btn variant="flat">
+    <v-btn variant="flat" >
       <template #append>
-        <v-img src="/images/shopping.png" width="24" height="24" class="ml-2"> </v-img>
-        سبد خرید
+        <router-link to="/cart" class="text-decoration-none" >
+          <div color="black">
+            <v-badge 
+            location="top right" 
+            color="red-lighten-4" 
+            :content="cartCount"
+             class="small-badge"
+
+             >
+              <v-img src="/images/shopping.png" width="24" height="24" class="ml-2"> </v-img>
+            </v-badge>
+            <span >سبد خرید</span>
+          </div>
+        </router-link>
       </template>
     </v-btn>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
+import { ref, computed } from 'vue'
+import { useCartStore } from '@/stores/cart'
+const cartStore = useCartStore()
 const loaded = ref(false)
 const loading = ref(false)
 
+const cartCount = computed(() => cartStore.cartCount)
 function onClick() {
   loading.value = true
   setTimeout(() => {

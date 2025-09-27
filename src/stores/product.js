@@ -57,7 +57,8 @@ export const useProductStore = defineStore('product', {
     getProductImages(product) {
       const imageId = product.relationships.images.data[0].id
       const image = this.images.find((img) => img.id === imageId)
-      return image.attributes.styles[2].url
+      console.log(image)
+  return image?.attributes?.styles?.[2]?.url 
     },
   },
 })
