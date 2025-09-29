@@ -120,33 +120,21 @@ import qs from 'qs';
 
 const selectedBrands = ref([])
 const selectedSizes = ref([])
-const selectedColors = ref([])
-
-const todayDelivery = ref(false)
 const availableOnly = ref(false)
+
+const selectedColors = ref([])
+const todayDelivery = ref(false)
 const price = ref([10, 50])
 
 onMounted(() => {
   const urlParams = window.location.search.replace(/^\?/, '')
   const filtersFromUrl = qs.parse(urlParams, { depth: 10, ignoreQueryPrefix: true })
-  console.log('Filters from URL:', filtersFromUrl)
 
-  if (filtersFromUrl.filter?.options?.color) {
-    selectedColors.value = Array.isArray(filtersFromUrl.filter.options.color)
-      ? filtersFromUrl.filter.options.color
-      : [filtersFromUrl.filter.options.color]
-  }
-  if (filtersFromUrl.filter?.options?.size) {
-    selectedSizes.value = Array.isArray(filtersFromUrl.filter.options.size)
-      ? filtersFromUrl.filter.options.size
-      : [filtersFromUrl.filter.options.size]
-  }
   const queryStringFilters = qs.stringify(filtersFromUrl, {
     encode: false,   
     arrayFormat: 'repeat',
   })
   
-console.log("gfgfghghghg",  queryStringFilters)
   productStore.getProducts(queryStringFilters)
 });
 
@@ -169,26 +157,28 @@ function applyFilters() {
       size: selectedSizes.value,
     },
    }
+  };
+  if (availableOnly.value) {
+    filters.filter.in_stock = 'true';
   }
+
 const queryStringFilters = qs.stringify(filters, {
   encode: false,       
   arrayFormat: 'repeat'
 });
-window.history.pushState({}, '', `/?${queryStringFilters}`);
 
-console.log(queryStringFilters);
-
-productStore.getProducts(queryStringFilters)
+window.history.pushState({}, '', `/?${queryStringFilters}`)
+  productStore.getProducts(queryStringFilters, productStore.activeSort) 
+  
 }
 
 
 function removeFilters() {
   selectedSizes.value = [];
   selectedColors.value = [];
+  availableOnly.value = false
    window.history.pushState({}, '', '/')
-
-   productStore.getProducts()
-}
+ productStore.clearFilters()}
 
 </script>
 

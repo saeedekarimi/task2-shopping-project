@@ -13,27 +13,38 @@ export const useProductStore = defineStore('product', {
     links: {},
     colors: [],
     sizes: [],
+    activeFilters: {},
+    activeSort: '',
   }),
 
   actions: {
-    async getProducts(queryStringFilters) {
+    async getProducts(queryStringFilters, sortParams) {
       try {
-        console.log('Query String:', queryStringFilters)
+        if (queryStringFilters) {
+          this.activeFilters = qs.parse(queryStringFilters, { depth: 10 })
+        }
+        if (sortParams) {
+          this.activeSort = sortParams
+          this.page = 1
+        }
 
-        const parsedFilters = qs.parse(queryStringFilters, { depth: 10 })
+        const params = {
+          include: 'images',
+          page: this.page,
+          per_page: this.perPage,
+          ...this.activeFilters,
+        }
+
+         if (this.activeSort) {
+          params.sort = this.activeSort
+        }
+
 
         const response = await axios.get('/api/api/v2/storefront/products', {
-          params: {
-            include: 'images',
-            page: this.page,
-            per_page: this.perPage,
-            ...parsedFilters,
-          },
-
+          params,
           paramsSerializer: (params) => {
             return qs.stringify(params, { encode: false, arrayFormat: 'repeat' })
           },
-
           headers: {
             'Cache-Control': 'no-cache',
             Pragma: 'no-cache',
@@ -48,7 +59,7 @@ export const useProductStore = defineStore('product', {
         this.colors = response.data.meta.filters.option_types[0].option_values
         this.sizes = response.data.meta.filters.option_types[1].option_values
 
-        console.log(response.data.data)
+        console.log(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -57,8 +68,13 @@ export const useProductStore = defineStore('product', {
     getProductImages(product) {
       const imageId = product.relationships.images.data[0].id
       const image = this.images.find((img) => img.id === imageId)
-      console.log(image)
-  return image?.attributes?.styles?.[2]?.url 
+      return image?.attributes?.styles?.[2]?.url
+    },
+
+    clearFilters() {
+      this.activeFilters = {}
+      this.page = 1
+      this.getProducts(null, this.activeSort)
     },
   },
 })

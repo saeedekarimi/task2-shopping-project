@@ -37,7 +37,7 @@ watch(
   () => productStore.page,
   (newPage, oldPage) => {
     if (newPage !== oldPage) {
-      productStore.getProducts()
+      productStore.getProducts(null,null)
     }
   },
 )

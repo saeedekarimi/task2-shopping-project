@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <v-row class="ma-0 pa-0">
-      <v-col v-for="product in products" :key="product.id" class="pa-0" cols="12" sm="6" md="4" lg="4">
-        <v-sheet class="ma-2">
-          <v-card max-width="288" min-height="429" class="border-md rounded-xl  mt-5" variant="flat">
+    <div>
+    <v-card max-width="288" min-height="429" class="border-md rounded-xl  mt-5" variant="flat">
             <v-img
               :src="productStore.getProductImages(product)"
               max-height="256"
@@ -35,31 +32,26 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </div>
+    </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useProductStore } from '@/stores/product'
 import { useCartStore } from '@/stores/cart'
 const productStore = useProductStore()
 const cartStore = useCartStore()
 
-const products = computed(() => productStore.products)
-onMounted(() => {
-  productStore.getProducts()
-})
-
 function addProductToCart(product){
 cartStore.addToCart(product)
 }
+
+const props = defineProps({
+  product:Object
+  })
 </script>
 
 <style scoped>
-
 :deep(.truncate-2) {
   display: -webkit-box !important;
   -webkit-line-clamp: 2;
@@ -70,7 +62,5 @@ cartStore.addToCart(product)
   word-break: break-word;
 }
 
-.addToCart{
 
-}
 </style>
