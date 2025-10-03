@@ -2,15 +2,17 @@
   <v-row>
     <v-col>
       <v-card class="filter-card mt-3">
-        <div class="d-flex justify-space-between align-center mb-4">
+        <div class="d-flex justify-space-between align-center">
           <span class="filter-title">فیلترها</span>
           <v-btn @click="applyFilters" variant="text" color="" size="small">اعمال فیلترها</v-btn>
 
-          <v-btn @click="removeFilters" variant="text" color="red-darken-4" size="small">حذف فیلترها</v-btn>
+          <v-btn @click="removeFilters" variant="text" color="red-darken-4" size="small"
+            >حذف فیلترها</v-btn
+          >
         </div>
 
-        <v-expansion-panels variant="accordion" class="">
-          <v-expansion-panel>
+        <v-expansion-panels variant="accordion">
+          <v-expansion-panel class="">
             <v-expansion-panel-title>برند</v-expansion-panel-title>
             <v-expansion-panel-text>
               <v-checkbox
@@ -55,8 +57,9 @@
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
+        <v-divider />
 
-        <div class="mt-4">
+        <div class="">
           <div class="switch-row">
             <span class="switch-text"> ارسال امروز </span>
             <v-switch
@@ -115,8 +118,11 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useProductStore } from '@/stores/product'
 const productStore = useProductStore()
-import qs from 'qs';
+import qs from 'qs'
 
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
 
 const selectedBrands = ref([])
 const selectedSizes = ref([])
@@ -127,17 +133,16 @@ const todayDelivery = ref(false)
 const price = ref([10, 50])
 
 onMounted(() => {
-  const urlParams = window.location.search.replace(/^\?/, '')
-  const filtersFromUrl = qs.parse(urlParams, { depth: 10, ignoreQueryPrefix: true })
-
-  const queryStringFilters = qs.stringify(filtersFromUrl, {
-    encode: false,   
-    arrayFormat: 'repeat',
+  const filtersFromUrl = qs.parse(route.fullPath.split('?')[1], {
+    depth: 10,
+    ignoreQueryPrefix: true,
   })
-  
-  productStore.getProducts(queryStringFilters)
-});
+  selectedColors.value = filtersFromUrl.filter?.options?.color || []
+  selectedSizes.value = filtersFromUrl.filter?.options?.size || []
+  availableOnly.value = filtersFromUrl.filter?.in_stock === 'true' || false
 
+  productStore.getProducts(filtersFromUrl)
+})
 
 const sizes = computed(() => productStore.sizes)
 const colors = computed(() => productStore.colors)
@@ -151,42 +156,42 @@ const brands = [
 
 function applyFilters() {
   const filters = {
-    filter :{
-       options: {
-      color: selectedColors.value,
-      size: selectedSizes.value,
+    filter: {
+      options: {
+        color: selectedColors.value,
+        size: selectedSizes.value,
+      },
     },
-   }
-  };
+  }
   if (availableOnly.value) {
-    filters.filter.in_stock = 'true';
+    filters.filter.in_stock = 'true'
   }
 
-const queryStringFilters = qs.stringify(filters, {
-  encode: false,       
-  arrayFormat: 'repeat'
-});
+  const queryStringFilters = qs.stringify(filters, {
+    encode: false,
+    arrayFormat: 'repeat',
+  })
 
-window.history.pushState({}, '', `/?${queryStringFilters}`)
-  productStore.getProducts(queryStringFilters, productStore.activeSort) 
-  
+
+router.push(`/?${queryStringFilters}`)
+  productStore.getProducts(filters, productStore.activeSort)
 }
 
-
 function removeFilters() {
-  selectedSizes.value = [];
-  selectedColors.value = [];
+  selectedSizes.value = []
+  selectedColors.value = []
   availableOnly.value = false
-   window.history.pushState({}, '', '/')
- productStore.clearFilters()}
-
+router.push({ path: '/' })
+  productStore.clearFilters()
+}
 </script>
 
 <style scoped>
 .filter-card {
   border: 1px solid #eee;
+  box-shadow: none;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1em;
 }
 
 .filter-title {
@@ -212,10 +217,15 @@ function removeFilters() {
   box-shadow: none !important;
   border: none !important;
   border-radius: 0 !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 :deep(.v-expansion-panel-title) {
   border: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 :deep(.v-expansion-panel__shadow) {

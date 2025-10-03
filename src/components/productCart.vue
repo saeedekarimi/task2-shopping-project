@@ -1,12 +1,13 @@
 <template>
     <div>
-    <v-card max-width="288" min-height="429" class="border-md rounded-xl  mt-5" variant="flat">
+    <v-card max-width="288" max-height="429" class="border-sm mt-5" style="border-radius: 16px; box-shadow: none;" >
             <v-img
               :src="productStore.getProductImages(product)"
               max-height="256"
               max-width="256"
-              class="mx-auto my-3"
+              class="mx-4 my-4"
               contain
+              style="border-radius: 8px;"
             >
             </v-img>
 
@@ -36,7 +37,6 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
 import { useProductStore } from '@/stores/product'
 import { useCartStore } from '@/stores/cart'
 const productStore = useProductStore()

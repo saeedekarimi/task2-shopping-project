@@ -18,10 +18,10 @@ export const useProductStore = defineStore('product', {
   }),
 
   actions: {
-    async getProducts(queryStringFilters, sortParams) {
+    async getProducts(filters, sortParams) {
       try {
-        if (queryStringFilters) {
-          this.activeFilters = qs.parse(queryStringFilters, { depth: 10 })
+        if (filters) {
+          this.activeFilters = filters
         }
         if (sortParams) {
           this.activeSort = sortParams
@@ -50,6 +50,21 @@ export const useProductStore = defineStore('product', {
             Pragma: 'no-cache',
           },
         })
+
+//         const paramsObj = {
+//   include: 'images',
+//   page: this.page,
+//   per_page: this.perPage,
+//   ...this.activeFilters
+// }
+// const fullQuery = qs.stringify(paramsObj, { encode: false, arrayFormat: 'brackets' })
+// console.log('Final query string sent to server:', fullQuery)
+
+// // روش مستقیم (بدون paramsSerializer)
+// const response = await axios.get(`/api/api/v2/storefront/products?${fullQuery}`, {
+//   headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
+// })
+
         this.products = response.data.data
         this.images = response.data.included
         this.count = response.data.meta.count

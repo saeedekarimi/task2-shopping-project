@@ -29,9 +29,6 @@ const totalCount = computed(() => productStore.totalCount)
 const totalPage = computed(() => productStore.totalPage)
 const links = computed(() => productStore.links)
 
-onMounted(() => {
-  productStore.getProducts()
-})
 
 watch(
   () => productStore.page,

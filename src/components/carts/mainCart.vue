@@ -2,28 +2,29 @@
   <div>
     <v-row>
       <v-card-text> سبد خرید</v-card-text>
-      <v-divider class="" color="grey-darken-4" />
-     
+      <v-divider class="" color="grey-darken-4"  />
+
       <v-col v-for="cart in carts" :key="cart.id">
-        <v-card
-          class="d-flex ga-10 align-center justify-space-around"
-          elevation="0"
-        >
-          <v-btn @click="removeProduct(cart)" variant="flat">
-            <v-img src="/images/close-square.png" width="24"></v-img>
-          </v-btn>
-          <v-img :src="cart.imageUrl" height="120" width="126" class="mx-auto my-3" contain>
-          </v-img>
+        <v-card class="d-flex ga-8 justify-space-between align-center" elevation="0" max-width="800" >
+          <div class="d-flex align-center mr-4">
+            <v-btn @click="removeProduct(cart)" variant="flat">
+              <v-img src="/images/close-square.png" width="24"></v-img>
+            </v-btn>
+            <v-img :src="cart.imageUrl" height="120" width="126" class="mx-auto my-3" contain>
+            </v-img>
+          </div>
 
-          <v-card-title class="ml-10">
-            <h6>{{ cart.attributes.name }}</h6>
-          </v-card-title>
+          <div class="d-flex  justify-space-between flex-grow-1">
+            <v-card-title class="ml-10">
+              <h6>{{ cart.attributes.name }}</h6>
+            </v-card-title>
+            <span class="price">{{ cart.attributes.display_price }}</span>
+          </div>
 
-          <span class="price">{{ cart.attributes.display_price }}</span>
-          <div class="d-flex flex-column  ">
+          <div class="d-flex flex-column mr-16">
             <v-card-actions>
-              <div class="d-flex border-md justify-end mt-16 rounded-lg">
-                <div class="border-e-lg">
+              <div class="d-flex border-md justify-center mt-10 rounded-lg">
+                <div class="border-e-md">
                   <v-btn
                     @click="increase(cart.id)"
                     icon="mdi-plus"
@@ -32,7 +33,7 @@
                   ></v-btn>
                 </div>
                 <span class="px-4 mt-2">{{ cart.quantity }}</span>
-                <div class="border-s-lg">
+                <div class="border-s-md">
                   <v-btn
                     @click="decrease(cart.id)"
                     class="decrease"
@@ -43,10 +44,12 @@
                 </div>
               </div>
             </v-card-actions>
-            <div class="d-flex align-center justify-end ">
+
+            <div class="d-flex align-center justify-end">
               <v-img src="/images/truck-fast.png" width="24"></v-img>
               <v-card-text>ارسال از سه روز آینده</v-card-text>
             </div>
+            
           </div>
         </v-card>
         <v-divider color="grey-darken-4" class="my-2" />

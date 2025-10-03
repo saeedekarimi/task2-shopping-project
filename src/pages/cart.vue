@@ -1,16 +1,15 @@
 <template>
-  <v-container >
-
+<v-container>
     <v-row dense>
-      <v-col cols="12" sm="6" md="9">
+      <v-col cols="12" sm="7" md="9">
         <MainCart />
       </v-col>
 
-      <v-col cols="12" sm="6" md="3">
+      <v-col cols="12" sm="5" md="3">
         <SideBar />
       </v-col>
     </v-row>
-  </v-container>
+</v-container>
 </template>
 
 <script setup>

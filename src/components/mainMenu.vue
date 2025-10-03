@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex ga-2 mb-8 px-16  ">
+    <div class="d-flex  mb-8 px-16  ">
       <v-btn class="bg-error rounded-lg" width="184" height="48"> خودت طراحیش کن !</v-btn>
         <v-tabs v-model="tab" align-tabs="title" >
           <v-tab v-for="item in items" 

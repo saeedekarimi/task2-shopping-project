@@ -38,7 +38,7 @@
     <v-btn variant="flat" >
       <template #append>
         <router-link to="/cart" class="text-decoration-none" >
-          <div color="black">
+          <div style="color: black;">
             <v-badge 
             location="top right" 
             color="red-lighten-4" 
