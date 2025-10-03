@@ -20,21 +20,18 @@ const productStore = useProductStore()
 const tab = ref(null)
 const loading = ref(false)
 
-watch(
-  tab,
-  async (newTab) => {
-          loading.value = true
-
+watch(tab, async (newTab) => {
+  loading.value = true
+  try {
     if (newTab === null) {
       await productStore.getProducts()
-
     } else {
       await productStore.getProducts(null, newTab)
     }
-          loading.value = false
-
-  },
-
-  { immediate: true },
-)
+  } catch (error) {
+    console.error('Error fetching products:', error)
+  } finally {
+    loading.value = false
+  }
+})
 </script>

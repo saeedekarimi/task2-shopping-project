@@ -13,7 +13,13 @@ export const useProductStore = defineStore('product', {
     links: {},
     colors: [],
     sizes: [],
-    activeFilters: {},
+    activeFilters: {
+      options: {
+        color: [],
+        size: [],
+      },
+      in_stock: false,
+    },
     activeSort: '',
   }),
 
@@ -35,10 +41,9 @@ export const useProductStore = defineStore('product', {
           ...this.activeFilters,
         }
 
-         if (this.activeSort) {
+        if (this.activeSort) {
           params.sort = this.activeSort
         }
-
 
         const response = await axios.get('/api/api/v2/storefront/products', {
           params,
@@ -51,20 +56,6 @@ export const useProductStore = defineStore('product', {
           },
         })
 
-//         const paramsObj = {
-//   include: 'images',
-//   page: this.page,
-//   per_page: this.perPage,
-//   ...this.activeFilters
-// }
-// const fullQuery = qs.stringify(paramsObj, { encode: false, arrayFormat: 'brackets' })
-// console.log('Final query string sent to server:', fullQuery)
-
-// // روش مستقیم (بدون paramsSerializer)
-// const response = await axios.get(`/api/api/v2/storefront/products?${fullQuery}`, {
-//   headers: { 'Cache-Control': 'no-cache', Pragma: 'no-cache' }
-// })
-
         this.products = response.data.data
         this.images = response.data.included
         this.count = response.data.meta.count
@@ -74,7 +65,6 @@ export const useProductStore = defineStore('product', {
         this.colors = response.data.meta.filters.option_types[0].option_values
         this.sizes = response.data.meta.filters.option_types[1].option_values
 
-        console.log(response.data)
       } catch (error) {
         console.log(error)
       }

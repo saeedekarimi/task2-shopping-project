@@ -1,9 +1,17 @@
 <template>
   <div>
     <v-row class="ma-0 pa-0">
-      <v-col v-for="product in products" :key="product.id" class="pa-0" cols="12" sm="6" md="4" lg="4">
+      <v-col
+        v-for="product in products"
+        :key="product.id"
+        class="pa-0"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
         <v-sheet class="ma-2">
-      <ProductCart :product="product" />
+          <ProductCart :product="product" />
         </v-sheet>
       </v-col>
     </v-row>
@@ -15,14 +23,23 @@ import { ref, computed, onMounted } from 'vue'
 import { useProductStore } from '@/stores/product'
 import ProductCart from '@/components/productCart.vue'
 const productStore = useProductStore()
+import qs from 'qs'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const products = computed(() => productStore.products)
 
 onMounted(() => {
-  productStore.getProducts()
-})
+  const filtersFromUrl = qs.parse(route.fullPath, {
+    depth: 10,
+    ignoreQueryPrefix: true,
+  })
+  productStore.activeFilters.options.color = filtersFromUrl.filter?.options?.color || []
+  productStore.activeFilters.options.size = filtersFromUrl.filter?.options?.size || []
+  productStore.activeFilters.in_stock = filtersFromUrl.filter?.in_stock === 'true' || false
 
+  productStore.getProducts(filtersFromUrl)
+})
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

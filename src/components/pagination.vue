@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useProductStore } from '@/stores/product'
 const productStore = useProductStore()
 const count = computed(() => productStore.count)

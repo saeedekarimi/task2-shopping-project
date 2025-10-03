@@ -115,14 +115,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useProductStore } from '@/stores/product'
 const productStore = useProductStore()
 import qs from 'qs'
 
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 const router = useRouter()
-const route = useRoute()
 
 const selectedBrands = ref([])
 const selectedSizes = ref([])
@@ -131,18 +130,6 @@ const availableOnly = ref(false)
 const selectedColors = ref([])
 const todayDelivery = ref(false)
 const price = ref([10, 50])
-
-onMounted(() => {
-  const filtersFromUrl = qs.parse(route.fullPath.split('?')[1], {
-    depth: 10,
-    ignoreQueryPrefix: true,
-  })
-  selectedColors.value = filtersFromUrl.filter?.options?.color || []
-  selectedSizes.value = filtersFromUrl.filter?.options?.size || []
-  availableOnly.value = filtersFromUrl.filter?.in_stock === 'true' || false
-
-  productStore.getProducts(filtersFromUrl)
-})
 
 const sizes = computed(() => productStore.sizes)
 const colors = computed(() => productStore.colors)
@@ -172,8 +159,7 @@ function applyFilters() {
     arrayFormat: 'repeat',
   })
 
-
-router.push(`/?${queryStringFilters}`)
+  router.push(`/?${queryStringFilters}`)
   productStore.getProducts(filters, productStore.activeSort)
 }
 
@@ -181,7 +167,7 @@ function removeFilters() {
   selectedSizes.value = []
   selectedColors.value = []
   availableOnly.value = false
-router.push({ path: '/' })
+  router.push({ path: '/' })
   productStore.clearFilters()
 }
 </script>
