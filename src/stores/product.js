@@ -13,13 +13,7 @@ export const useProductStore = defineStore('product', {
     links: {},
     colors: [],
     sizes: [],
-    activeFilters: {
-      options: {
-        color: [],
-        size: [],
-      },
-      in_stock: false,
-    },
+    activeFilters: {},
     activeSort: '',
   }),
 

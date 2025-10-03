@@ -23,11 +23,10 @@ const loading = ref(false)
 watch(tab, async (newTab) => {
   loading.value = true
   try {
-    if (newTab === null) {
-      await productStore.getProducts()
-    } else {
-      await productStore.getProducts(null, newTab)
-    }
+    await productStore.getProducts({
+      ...productStore.activeFilters,
+      sort:newTab
+    })
   } catch (error) {
     console.error('Error fetching products:', error)
   } finally {

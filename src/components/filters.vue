@@ -149,6 +149,7 @@ function applyFilters() {
         size: selectedSizes.value,
       },
     },
+       sort: productStore.activeFilters.sort || null, 
   }
   if (availableOnly.value) {
     filters.filter.in_stock = 'true'
@@ -160,7 +161,7 @@ function applyFilters() {
   })
 
   router.push(`/?${queryStringFilters}`)
-  productStore.getProducts(filters, productStore.activeSort)
+  productStore.getProducts(filters)
 }
 
 function removeFilters() {

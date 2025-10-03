@@ -34,8 +34,9 @@ watch(
   () => productStore.page,
   (newPage, oldPage) => {
     if (newPage !== oldPage) {
-      productStore.getProducts(null,null)
-    }
+   productStore.getProducts({
+        ...productStore.activeFilters
+      })    }
   },
 )
 

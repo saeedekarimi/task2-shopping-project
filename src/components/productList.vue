@@ -30,15 +30,20 @@ const route = useRoute()
 const products = computed(() => productStore.products)
 
 onMounted(() => {
-  const filtersFromUrl = qs.parse(route.fullPath, {
+  const filtersFromUrl = qs.parse(location.search, {
     depth: 10,
     ignoreQueryPrefix: true,
   })
+  if (!productStore.activeFilters.options) {
+    productStore.activeFilters.options = { color: [], size: [] }
+  }
   productStore.activeFilters.options.color = filtersFromUrl.filter?.options?.color || []
   productStore.activeFilters.options.size = filtersFromUrl.filter?.options?.size || []
   productStore.activeFilters.in_stock = filtersFromUrl.filter?.in_stock === 'true' || false
 
-  productStore.getProducts(filtersFromUrl)
+  productStore.activeFilters.sort = filtersFromUrl.sort || null
+
+  productStore.getProducts({ ...productStore.activeFilters })
 })
 </script>
 
