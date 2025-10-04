@@ -115,7 +115,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useProductStore } from '@/stores/product'
 const productStore = useProductStore()
 import qs from 'qs'
@@ -134,6 +134,12 @@ const price = ref([10, 50])
 const sizes = computed(() => productStore.sizes)
 const colors = computed(() => productStore.colors)
 
+onMounted(() => {
+  selectedColors.value = productStore.activeFilters.filter?.options?.color
+  selectedSizes.value = productStore.activeFilters.filter?.options?.size
+  availableOnly.value = productStore.activeFilters.filter?.in_stock
+})
+
 const brands = [
   { label: 'اچ پی', value: 'hp' },
   { label: 'ام اس آی', value: 'msi' },
@@ -146,10 +152,10 @@ function applyFilters() {
     filter: {
       options: {
         color: selectedColors.value,
-        size: selectedSizes.value,
+        size: selectedSizes.value
       },
     },
-       sort: productStore.activeFilters.sort || null, 
+    sort: productStore.activeFilters.sort || null,
   }
   if (availableOnly.value) {
     filters.filter.in_stock = 'true'

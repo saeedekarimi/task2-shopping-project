@@ -13,19 +13,23 @@ export const useProductStore = defineStore('product', {
     links: {},
     colors: [],
     sizes: [],
-    activeFilters: {},
-    activeSort: '',
+    activeFilters: {
+      filter: {
+        options: {
+          color: [],
+          size: [],
+        },
+        in_stock: false,
+      },
+      sort: null,
+    },
   }),
 
   actions: {
-    async getProducts(filters, sortParams) {
+    async getProducts(filters = null) {
       try {
         if (filters) {
           this.activeFilters = filters
-        }
-        if (sortParams) {
-          this.activeSort = sortParams
-          this.page = 1
         }
 
         const params = {
@@ -33,10 +37,6 @@ export const useProductStore = defineStore('product', {
           page: this.page,
           per_page: this.perPage,
           ...this.activeFilters,
-        }
-
-        if (this.activeSort) {
-          params.sort = this.activeSort
         }
 
         const response = await axios.get('/api/api/v2/storefront/products', {
@@ -58,7 +58,6 @@ export const useProductStore = defineStore('product', {
         this.links = response.data.links
         this.colors = response.data.meta.filters.option_types[0].option_values
         this.sizes = response.data.meta.filters.option_types[1].option_values
-
       } catch (error) {
         console.log(error)
       }
@@ -71,9 +70,20 @@ export const useProductStore = defineStore('product', {
     },
 
     clearFilters() {
-      this.activeFilters = {}
+      this.activeFilters = {
+        filter: {
+          options: {
+            color: [],
+            size: [],
+          },
+          in_stock: false,
+        },
+        sort: null,
+      }
       this.page = 1
-      this.getProducts(null, this.activeSort)
+      this.getProducts()
     },
+
+    
   },
 })

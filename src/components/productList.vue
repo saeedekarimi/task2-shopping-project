@@ -24,8 +24,6 @@ import { useProductStore } from '@/stores/product'
 import ProductCart from '@/components/productCart.vue'
 const productStore = useProductStore()
 import qs from 'qs'
-import { useRoute } from 'vue-router'
-const route = useRoute()
 
 const products = computed(() => productStore.products)
 
@@ -34,14 +32,17 @@ onMounted(() => {
     depth: 10,
     ignoreQueryPrefix: true,
   })
-  if (!productStore.activeFilters.options) {
-    productStore.activeFilters.options = { color: [], size: [] }
+ 
+  productStore.activeFilters = {
+    filter: {
+      options: {
+        color: filtersFromUrl.filter?.options?.color || [],
+        size: filtersFromUrl.filter?.options?.size || [],
+      },
+      in_stock: filtersFromUrl.filter?.in_stock === 'true' || false
+    },
+    sort: filtersFromUrl.sort || null
   }
-  productStore.activeFilters.options.color = filtersFromUrl.filter?.options?.color || []
-  productStore.activeFilters.options.size = filtersFromUrl.filter?.options?.size || []
-  productStore.activeFilters.in_stock = filtersFromUrl.filter?.in_stock === 'true' || false
-
-  productStore.activeFilters.sort = filtersFromUrl.sort || null
 
   productStore.getProducts({ ...productStore.activeFilters })
 })
